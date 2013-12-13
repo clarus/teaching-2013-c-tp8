@@ -1,4 +1,4 @@
-default: echo
+default: echo cat
 
 clean:
 	rm -f *.o
