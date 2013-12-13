@@ -17,15 +17,6 @@ void display_file(int fd) {
 }
 
 int main(int argc, char ** argv) {
-  int i;
-  
-  if (argc == 1)
-    display_file(0); // 0 est le decripteur de fichier de l'entrée standard
-  else
-    for (i = 1; i < argc; i++) {
-      int fd = open(argv[i], O_RDONLY); // le mode d'ouverture est lecture seule
-      display_file(fd);
-      close(fd);
-    }
+  // TODO
   return 0;
 }
