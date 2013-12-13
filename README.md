@@ -72,9 +72,42 @@ void display_file(int fd) {
 }
 ```
 ### Questions
-* Écrire une commande `cat` qui affiche le contenu de chaque fichier donné en argument (on fera attention à refermer chaque fichier).
+* Écrire une commande `cat` qui affiche le contenu de chaque fichier donné en argument (on fera attention à refermer chaque fichier). On n'hésitera pas à chercher dans la documentation.
 * Améliorer `cat` pour prendre en compte le cas sans argument (affichage de l'entrée standard). Le descripteur de l'entrée standard est 0.
 
 ls
 --
-La commande `ls` affiche le contenu d'un dossier.
+La commande `ls` affiche le contenu d'un dossier ou la description d'un fichier. Exemple affichant la taille en octets des fichiers donnés en arguments :
+```c
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
+void ls(char * path) {
+  int fd, size;
+  struct stat stat; // variable représentant le status du fichier
+  // (les structures ne sont pas au programme mais nécessaires ici)
+  
+  fd = open(path, O_RDONLY);
+  fstat(fd, &stat); // lecture du status
+  size = stat.st_size; // la taille est donnée par le champ st_size
+  printf("%6d %s\n", size, path);
+  close(fd);
+}
+
+int main(int argc, char ** argv) {
+  int i;
+  if (argc == 1)
+    ls(".");
+  else
+    for (i = 1; i < argc; i++)
+      ls(argv[i]);
+  return 0;
+}
+```
+### Questions
+* Afficher la taille en octets, Ko, Mo ou Go suivant la valeur. On écrira une fonction auxiliaire effectuant ce traitement.
+* À l'aide de la documentation, ajouter l'affichage des droits d'accès (tels que donnés par `ls -l`).
+* Ajouter un maximum de fonctionnalités : affichage du contenu d'un dossier, option `-R`, ...
